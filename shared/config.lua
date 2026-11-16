@@ -1,23 +1,34 @@
 Config = {}
-Config.FuelDebug = false -- Used for debugging, although there are not many areas in yet (Default: false) + Enables Setfuel Commands (0, 50, 100). 
-Config.PolyDebug = false -- Enables Polyzone Debugging to see PolyZones!
-Config.ShowNearestGasStationOnly = true -- When enabled, only the nearest gas stations will be shown on the map.
-Config.LeaveEngineRunning = false -- When true, the vehicle's engine will be left running upon exit if the player *HOLDS* F.
-Config.VehicleBlowUp = true -- When true, there will be a configurable chance of the vehicle blowing up, if you fuel while the engine is on.
-Config.BlowUpChance = 5 -- Percentage for Chance of Engine Explosion (Default: 5% or 5)
-Config.CostMultiplier = 3 -- Amount to multiply 1 by. This indicates fuel price. (Default: $3.0/l or 3.0)
-Config.GlobalTax = 15.0 -- The tax, in %, that people will be charged at the pump. (Default: 15% or 15.0)
-Config.FuelNozzleExplosion = false -- When true, it enables the fuel pump exploding when players run away with the nozzle. Highly recommeded to be false.
-Config.FuelDecor = "_FUEL_LEVEL" -- Do not touch! (Default: "_FUEL_LEVEL")
-Config.RefuelTime = 600 -- Highly recommended to leave at 600. This value will be multiplied times the amount the player is fueling for the progress bar and cancellation logic! DON'T GO BELOW 250, performance WILL drop!
-Config.FuelTargetExport = false -- DO NOT USE WITH OX_TARGET! This is only used to fix this qb-target issue: https://github.com/CodineDev/cdn-fuel/issues/3. <br> <br> If you don't have this issue and haven't installed this exports in qb-target, then this should be false. Otherwise there will be an error.
+-- Debug
+Config.FuelDebug = false -- Usado para depuração, embora ainda não existam muitas áreas (Padrão: false) + Habilita comandos Setfuel (0, 50, 100).
+Config.PolyDebug = false -- Ativa a depuração Polyzone para ver PolyZones!
 
--- 2.1.1 Update --
-Config.OwnersPickupFuel = false -- If an owner buys fuel, they will have to go pick it up at a configured location.
+
+-- Estrutura:
+Config.Core = 'pr_bridge' -- Framework, inventário e interface são resolvidos exclusivamente pelo PR Bridge.
+Config.Bridge = { -- Contratos de interface fornecidos pelo PR Bridge.
+    Inventory = true, -- Usa o inventário selecionado pelo PR Bridge.
+    Menu = true, -- Usa os menus do PR Bridge.
+    Input = true, -- Usa os diálogos do PR Bridge.
+    DrawText = true, -- Usa o TextUI do PR Bridge.
+    Progress = true -- Usa o progresso do PR Bridge.
+}
+
+
+Config.ShowNearestGasStationOnly = true -- Quando ativado, apenas os postos de gasolina mais próximos serão mostrados no mapa.
+Config.LeaveEngineRunning = false -- Quando verdadeiro, o motor do veículo permanecerá ligado ao sair se o jogador *MANTER*F.
+Config.VehicleBlowUp = true -- Quando verdadeiro, haverá uma chance configurável de o veículo explodir, se você abastecer com o motor ligado.
+Config.BlowUpChance = 5 -- Porcentagem de chance de explosão do motor (padrão: 5% ou 5)
+Config.CostMultiplier = 3 -- Valor para multiplicar 1 por. Isso indica o preço do combustível. (Padrão: US$ 3,0/l ou 3,0)
+Config.GlobalTax = 15.0 -- O imposto, em %, que será cobrado das pessoas na bomba. (Padrão: 15% ou 15,0)
+Config.FuelNozzleExplosion = true -- Quando verdadeiro, permite que a bomba de combustível exploda quando os jogadores fogem com o bico. Altamente recomendado para ser falso.
+Config.FuelDecor = "_FUEL_LEVEL" -- Não toque! (Padrão: "_FUEL_LEVEL")
+Config.RefuelTime = 600 -- Altamente recomendado deixar em 600. Este valor será multiplicado pela quantidade que o jogador está abastecendo para a barra de progresso e lógica de cancelamento! NÃO VÁ ABAIXO DE 250, o desempenho VAI cair!
+
+Config.OwnersPickupFuel = false -- Caso o proprietário compre combustível, deverá ir buscá-lo em local configurado.
 Config.PossibleDeliveryTrucks = {
     "hauler",
     "phantom",
-    -- "phantom3", --  This is an fast version of the normal phantom.
     "packer",
 }
 Config.DeliveryTruckSpawns = { -- https://i.imgur.com/VS22i8R.jpeg
@@ -34,14 +45,11 @@ Config.DeliveryTruckSpawns = { -- https://i.imgur.com/VS22i8R.jpeg
         ['maxz'] = 115.0,
     }
 }
--- 2.1.1 End
-
--- 2.1.0 Update
 Config.EmergencyServicesDiscount = {
-    ['enabled'] = true, -- Enables Emergency Services Getting a discount based on the value below for Refueling & Electricity Charging Cost
-    ['discount'] = 25, -- % Discount off of price.
-    ['emergency_vehicles_only'] = true, -- Only allows discounts to be applied to Emergency Vehicles
-    ['ondutyonly'] = true, -- Discount only applies while on duty.
+    ['enabled'] = true, -- Habilita Serviços de Emergência Obtendo desconto com base no valor abaixo para Custo de Reabastecimento e Carregamento de Energia Elétrica
+    ['discount'] = 25, -- % Desconto sobre o preço.
+    ['emergency_vehicles_only'] = true, -- Permite apenas a aplicação de descontos em Veículos de Emergência
+    ['ondutyonly'] = true, -- O desconto aplica-se apenas durante o serviço. (Não funciona com ESX)
     ['job'] = {
         "police",
         "sasp",
@@ -49,78 +57,67 @@ Config.EmergencyServicesDiscount = {
         "ambulance",
     }
 }
-Config.Core = 'qb-core' -- Change this to your core resources (Ex: 'qbx-core' | 'qb-core'), must be qb based!
-Config.Ox = {
-    Inventory = false, -- Uses OX_Inventory's metadata instead of QB-Inventory's.
-    Menu = false, -- Uses OX Libraries instead of qb-menu.
-    Input = false, -- Uses Ox Input Dialog instead of qb-input.
-    DrawText = false, -- Uses Ox DrawText instead of qb-core DrawText.
-    Progress = false -- Uses Ox ProgressBar instead of progressbar.
-}
-Config.TargetResource = "qb-target" -- Supported: { 'qb-target', 'ox_target'} -- Others must use the same format as QB-Target or manual configuration is required.
-Config.PumpHose = false -- If true, it creates a hose from the pump to the nozzle the client is holding, to give it a more realistic feel.
-Config.RopeType = { -- Options: 1-2-3-4-5; 1: Khaki Color, Kind of Thick, 2: Very Thick Khaki Rope, 3: Very Thick Black Rope, 4: Very Thin Black Rope, 5: Same as 3
+Config.PumpHose = true -- Se for verdade, ele cria uma mangueira da bomba até o bico que o cliente está segurando, para dar uma sensação mais realista.
+Config.RopeType = { -- Opções: 1-2-3-4-5; 1: cor cáqui, meio grosso, 2: corda cáqui muito grossa, 3: corda preta muito grossa, 4: corda preta muito fina, 5: igual a 3
     ['fuel'] = 1,
     ['electric'] = 1,
 }
-Config.FaceTowardsVehicle = true -- Ped will turn towards the entity's boot bone for refueling, sometimes can result in incorrect nozzle placement when refueling.
-Config.VehicleShutoffOnLowFuel = { -- If enabled, vehicles will turn off when the reach 0 fuel. This works well in conjuction with disallowing people to turn on a vehicle with 0 fuel.
-    ['shutOffLevel'] = 0, -- At this fuel level, the vehicle will shut off. Default: 0, Recommended: 0-5.
+Config.FaceTowardsVehicle = true -- Ped se virará em direção à bota da entidade para reabastecer, às vezes pode resultar no posicionamento incorreto do bocal durante o reabastecimento.
+Config.VehicleShutoffOnLowFuel = { -- Se ativado, os veículos serão desligados quando atingirem 0 combustível. Isso funciona bem em conjunto com a proibição de que as pessoas liguem um veículo com 0 combustível.
+    ['shutOffLevel'] = 0, -- Neste nível de combustível, o veículo será desligado. Padrão: 0, Recomendado: 0-5.
     ['sounds'] = {
-        ['enabled'] = true, -- Are Sounds Enabled when vehicle has no fuel?
-        -- Find sound banks and sounds here: https://pastebin.com/A8Ny8AHZ.
-        ['audio_bank'] = "DLC_PILOT_ENGINE_FAILURE_SOUNDS", -- Audio Bank of Sound.
-        ['sound'] = "Landing_Tone", -- Sound Name in Audio Bank.
+        ['enabled'] = true, -- Os sons são ativados quando o veículo não tem combustível?
+        -- Encontre bancos de som e sons aqui: https://pastebin.com/A8Ny8AHZ.
+        ['audio_bank'] = "DLC_PILOT_ENGINE_FAILURE_SOUNDS", -- Banco de áudio de som.
+        ['sound'] = "Landing_Tone", -- Nome do som no banco de áudio.
     }
 }
 
--- 2.1.0 End
+-- Telefone (QB) -
+Config.RenewedPhonePayment = false -- Permite o uso de notificações e sistema de pagamento por telefone renovado
 
--- Phone --
-Config.RenewedPhonePayment = false -- Enables use of Renewed-Phone Payment System and Notifications
-
--- Syphoning --
-Config.UseSyphoning = false -- Follow the Syphoning Install Guide to enable this option!
-Config.SyphonDebug = false -- Used for Debugging the syphon portion!
-Config.SyphonKitCap = 50 -- Maximum amount (in L) the syphon kit can fit!
-Config.SyphonPoliceCallChance = 25 -- Math.Random(1, 100) Default: 25%
-Config.SyphonDispatchSystem = "ps-dispatch" -- Options: "ps-dispatch", "qb-dispatch", "qb-default" (just blips) or "custom" (Custom: you must configure yourself!)
+-- Sifonando -
+Config.UseSyphoning = false -- Siga o Guia de instalação do Syphoning para ativar esta opção!
+Config.SyphonDebug = false -- Usado para depurar a parte do sifão!
+Config.SyphonKitCap = 50 -- Quantidade máxima (em L) que o kit sifão pode acomodar!
+Config.SyphonPoliceCallChance = 25 -- Math.Random(1, 100) Padrão: 25%
+Config.SyphonDispatchSystem = "internal" -- O alerta usa o evento interno e permanece independente de um dispatch específico.
 
 --- Jerry Can -----
-Config.UseJerryCan = true -- Enable the Jerry Can functionality. Will only work if properly installed.
-Config.JerryCanCap = 50 -- Maximum amount (in L) the jerrycan can fit! (Default: 50L)
-Config.JerryCanPrice = 200 -- The price of a jerry can, not including tax.
-Config.JerryCanGas = 25 -- The amount of Gas that the Jerry Can you purchase comes with. This should not be bigger that your Config.JerryCanCap!
+Config.UseJerryCan = true -- Ative a funcionalidade Jerry Can. Só funcionará se instalado corretamente.
+Config.JerryCanCap = 50 -- Quantidade máxima (em L) que o galão cabe! (Padrão: 50L)
+Config.JerryCanPrice = 200 -- O preço de um galão, sem incluir impostos.
+Config.JerryCanGas = 25 -- A quantidade de gás que acompanha o Jerry Can que você compra. Não deve ser maior que o seu Config.JerryCanCap!
 
--- Animations --
-Config.StealAnimDict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@'-- Used for Syphoning
-Config.StealAnim = 'machinic_loop_mechandplayer'-- Used for Syphoning
-Config.JerryCanAnimDict = 'weapon@w_sp_jerrycan' -- Used for Syphoning & Jerry Can
-Config.JerryCanAnim = 'fire' -- Used for Syphoning & Jerry Can
-Config.RefuelAnimation = "gar_ig_5_filling_can" -- This is for refueling and charging.
-Config.RefuelAnimationDictionary = "timetable@gardener@filling_can" -- This is for refueling and charging.
+-- Animações -
+Config.StealAnimDict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@'-- Usado para sifonar
+Config.StealAnim = 'machinic_loop_mechandplayer'-- Usado para sifonar
+Config.JerryCanAnimDict = 'weapon@w_sp_jerrycan' -- Usado para sifonar e Jerry Can
+Config.JerryCanAnim = 'fire' -- Usado para sifonar e Jerry Can
+Config.RefuelAnimation = "gar_ig_5_filling_can" -- Isto é para reabastecer e carregar.
+Config.RefuelAnimationDictionary = "timetable@gardener@filling_can" -- Isto é para reabastecer e carregar.
 
---- Player Owned Gas (Gasoline) Ergonomic Refueling Stations (Poggers) ---
-Config.PlayerOwnedGasStationsEnabled = true -- When true, peds will be located at all gas stations, and players will be able to talk with peds & purchase gas stations, having to manage fuel supplies.
-Config.StationFuelSalePercentage = 0.65 -- % of sales that the station gets. If they sell 4 Liters of Gas for $16 (not including taxes), they will get 16*Config.StationFuelSalePercentage back from the sale. Treat this as tax, also, it balances the profit margins a bit.
-Config.EmergencyShutOff = false -- When true, players can walk up to the ped and shut off the pumps at a gas station. While false, this option is disabled, because it can obviously be an issue. 
-Config.UnlimitedFuel = false -- When true, the fuel stations will not require refuelling by gas station owners, this is for the early stages of implementation.
-Config.MaxFuelReserves = 100000 -- This is the maximum amount that the fuel station's reserves can hold.
-Config.FuelReservesPrice = 2.0 -- This is the price of fuel reserves for gas station owners.
-Config.GasStationSellPercentage = 50 -- This is the percentage that players will get of the gas stations price, when they sell a location!
-Config.MinimumFuelPrice = 2 -- This is the minimum value you want to let players set their fuel prices to.
-Config.MaxFuelPrice = 8 -- This is the maximum value you want to let players set their fuel prices to.
-Config.PlayerControlledFuelPrices = true -- This gives you the option to disable people being able to control fuel prices. When true, players can control the fuel prices via to management menu for the location.
-Config.GasStationNameChanges = true -- This gives you the option to disable people being able to change the name of their gas station, only recommended if it becomes a problem.
-Config.NameChangeMinChar = 10 -- This is the minimum length that a Gas Station's name must be.
-Config.NameChangeMaxChar = 25 -- This is the maximum length that a Gas Station's name must be.
-Config.WaitTime = 400 -- This is the wait time after callbacks, if you are having issues with menus not popping up, or being greyed out, up this to around ~300, it is not recommended to go over ~750, as menus will get slower and more unresponsive the higher you go. (Fixes this issue: https://www.shorturl.at/eqS19)
-Config.OneStationPerPerson = true -- This prevents players that already own one station from buying another, to prevent monopolies over Gas Stations.
+--- Estações de reabastecimento ergonômicas de gás (gasolina) de propriedade do jogador (Poggers) ---
+Config.PlayerOwnedGasStationsEnabled = true -- Quando isso for verdade, os peds estarão localizados em todos os postos de gasolina, e os jogadores poderão conversar com os peds e comprar postos de gasolina, tendo que gerenciar o abastecimento de combustível.
+Config.StationFuelSalePercentage = 0.65 -- % das vendas que a estação obtém. Se eles venderem 4 litros de gasolina por US$ 16 (sem impostos), eles receberão 16*Config.StationFuelSalePercentage de volta da venda. Trate isso como imposto, também, equilibra um pouco as margens de lucro.
+Config.EmergencyShutOff = true -- Quando for verdade, os jogadores podem ir até o pedágio e desligar as bombas de um posto de gasolina. Embora falsa, esta opção está desativada porque obviamente pode ser um problema.
+Config.UnlimitedFuel = false -- Quando for verdade, os postos de combustíveis não necessitarão de reabastecimento por parte dos proprietários dos postos, isto é para as fases iniciais de implementação.
+Config.MaxFuelReserves = 100000 -- Este é o valor máximo que as reservas do posto de combustível podem conter.
+Config.FuelReservesPrice = 2.0 -- Este é o preço das reservas de combustível para os proprietários de postos de gasolina.
+Config.GasStationSellPercentage = 50 -- Essa é a porcentagem que os jogadores receberão do preço do posto de gasolina, quando venderem um local!
+Config.MinimumFuelPrice = 2 -- Este é o valor mínimo que você deseja permitir que os jogadores definam seus preços de combustível.
+Config.MaxFuelPrice = 8 -- Este é o valor máximo que você deseja permitir que os jogadores definam seus preços de combustível.
+Config.PlayerControlledFuelPrices = true -- Isso lhe dá a opção de impedir que as pessoas possam controlar os preços dos combustíveis. Quando verdadeiro, os jogadores podem controlar os preços dos combustíveis através do menu de gerenciamento do local.
+Config.GasStationNameChanges = true -- Isso lhe dá a opção de impedir que as pessoas possam alterar o nome de seu posto de gasolina, recomendado apenas se isso se tornar um problema.
+Config.NameChangeMinChar = 10 -- Este é o comprimento mínimo que o nome de um posto de gasolina deve ter.
+Config.NameChangeMaxChar = 25 -- Este é o comprimento máximo que o nome de um posto de gasolina deve ter.
+Config.WaitTime = 400 -- Este é o tempo de espera após os retornos de chamada, se você estiver tendo problemas com menus que não aparecem ou ficam esmaecidos, até cerca de ~300, não é recomendado ultrapassar ~750, pois os menus ficarão mais lentos e sem resposta quanto mais alto você sobe. (Corrige este problema: https://www.shorturl.at/eqS19)
+Config.OneStationPerPerson = true -- Isso evita que jogadores que já possuem um posto comprem outro, para evitar monopólios sobre postos de gasolina.
 
---- Electric Vehicles
-Config.ElectricVehicleCharging = true -- When true, electric vehicles will actually consume resources and decrease 'Fuel / Battery' while driving. This means players will have to recharge their vehicle!
-Config.ElectricChargingPrice = 4 -- Per "KW". This value is multiplied times the amount of electricity someone put into their vehicle, to constitute the final cost of the charge. Players whom own the gas station will not recieve the money from electric charging.
-Config.ElectricVehicles = { -- List of Electric Vehicles in the Base Game.
+--- Veículos Elétricos
+Config.ElectricVehicleCharging = true -- Quando for verdade, os veículos elétricos irão, na verdade, consumir recursos e diminuir o ‘Combustível/Bateria’ durante a condução. Isso significa que os jogadores terão que recarregar seus veículos!
+Config.ElectricChargingPrice = 4 -- Por "KW". Este valor é multiplicado pela quantidade de eletricidade que alguém colocou no seu veículo, para constituir o custo final da carga. Os jogadores proprietários do posto de gasolina não receberão o dinheiro da recarga elétrica.
+Config.ElectricVehicles = { -- Lista de veículos elétricos no jogo básico.
     ["surge"] = {
         isElectric = true,
     },
@@ -173,19 +170,19 @@ Config.ElectricVehicles = { -- List of Electric Vehicles in the Base Game.
         isElectric = true,
     },
 }
-Config.ElectricSprite = 620 -- This is for when the player is in an electric charger, the blips with change to this sprite. (Sprite with a car with a bolt going through it: 620)
-Config.ElectricChargerModel = true -- If you wish, you can set this to false to add your own props, or use a ymap for the props instead.
+Config.ElectricSprite = 620 -- Isso é para quando o jogador estiver em um carregador elétrico, os blips mudam para esse sprite. (Sprite com um carro com um parafuso passando por ele: 620)
+Config.ElectricChargerModel = true -- Se desejar, você pode definir isso como false para adicionar seus próprios adereços ou usar um ymap para os adereços.
 
--- Basic Configuration Settings
--- Turn on Config.FuelDebug and use this command to get the name for here: getVehNameForBlacklist
-Config.NoFuelUsage = { -- This is for you to put vehicles that you don't want to use fuel.
+-- Configurações básicas
+-- Ative Config.FuelDebug e use este comando para obter o nome aqui: getVehNameForBlacklist
+Config.NoFuelUsage = { -- Isso serve para você colocar veículos que não quer consumir combustível.
     ["bmx"] = {
         blacklisted = true
     },
 }
 
-Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
-	[0] = 1.0, -- Compacts
+Config.Classes = { -- Multiplicadores de classe. Se quiser que os SUVs usem menos combustível, você pode alterá-lo para algo abaixo de 1.0 e vice-versa.
+	[0] = 1.0, -- Compactos
 	[1] = 1.0, -- Sedans
 	[2] = 1.0, -- SUVs
 	[3] = 1.0, -- Coupes
@@ -200,7 +197,7 @@ Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you 
 	[12] = 1.0, -- Vans
 	[13] = 0.0, -- Cycles
 	[14] = 1.0, -- Boats
-	[15] = 1.0, -- Helicopters
+	[15] = 1.0, -- Helicópteros
 	[16] = 1.0, -- Planes
 	[17] = 1.0, -- Service
 	[18] = 1.0, -- Emergency
@@ -209,7 +206,7 @@ Config.Classes = { -- Class multipliers. If you want SUVs to use less fuel, you 
 	[21] = 1.0, -- Trains
 }
 
-Config.FuelUsage = { -- The left part is at percentage RPM, and the right is how much fuel (divided by 10) you want to remove from the tank every second
+Config.FuelUsage = { -- A esquerda é a porcentagem de RPM; a direita é quanto combustível (dividido por 10) remover do tanque por segundo.
 	[1.0] = 1.3,
 	[0.9] = 1.1,
 	[0.8] = 0.9,
@@ -240,7 +237,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 50.0
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -272,7 +269,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 78.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -300,7 +297,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 50.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -328,7 +325,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 19.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -356,7 +353,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 19.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -384,7 +381,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -412,7 +409,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -440,7 +437,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 8.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Watercraft",
+            ['draw_text'] = "[G] Abastecer embarcação",
             ['type'] = 'water',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -468,7 +465,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -496,7 +493,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -524,7 +521,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -552,7 +549,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 37.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Watercraft",
+            ['draw_text'] = "[G] Abastecer embarcação",
             ['type'] = 'water',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -584,7 +581,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 42.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = true,
@@ -616,7 +613,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 10.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -644,7 +641,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 18.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -672,7 +669,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 18.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -700,7 +697,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Helicopter",
+            ['draw_text'] = "[G] Abastecer helicóptero",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -729,7 +726,7 @@ Config.AirAndWaterVehicleFueling = {
                     ['max'] = 47.50
                 },
             },
-            ['draw_text'] = "[G] Refuel Aircraft",
+            ['draw_text'] = "[G] Abastecer aeronave",
             ['type'] = 'air',
             ['whitelist'] = {
                 ['enabled'] = false,
@@ -762,7 +759,7 @@ Config.AirAndWaterVehicleFueling = {
         --             ['max'] = 38.67
         --         },
         --     },
-        --     ['draw_text'] = "[G] Refuel Aircraft",
+        --     ['draw_text'] = "[G] Abastecer aeronave",
         --     ['type'] = 'air',
         --     ['whitelist'] = {
         --         ['enabled'] = false,
@@ -779,8 +776,8 @@ Config.AirAndWaterVehicleFueling = {
     },
     ['refuel_button'] = 47, -- "G" Button for Draw Text.
     ['nozzle_length'] = 20.0, -- The max distance you can go from the "Special Pump" before the nozzle in returned to the pump.
-    ['air_fuel_price'] = 10, -- Price Per Liter of Fuel for Air Vehicles (Emergency Services Discount Still Applies)
-    ['water_fuel_price'] = 4, -- Price Per Liter of Fuel for Water Vehicles (Emergency Services Discount Still Applies)
+    ['air_fuel_price'] = 10, -- Preço por litro para veículos aéreos (desconto de emergência ainda se aplica).
+    ['water_fuel_price'] = 4, -- Preço por litro para veículos aquáticos (desconto de emergência ainda se aplica).
 }
 
 Config.GasStations = { -- Configuration options for various gas station related things, including peds, coords and labels.
@@ -1462,28 +1459,27 @@ Config.GasStations = { -- Configuration options for various gas station related 
     [29] = {
         zones = {
              https://skyrossm.github.io/PolyZoneCreator/
-             Use this for a quick way to add a Gas Station, instead of doing it in game, make sure you included the entire area, including the ped and electric pumps if used.
+             Use isto para adicionar um posto rapidamente fora do jogo; inclua a área toda, o ped e as bombas elétricas se usadas.
         },
         minz = 0,
         maxz = 800.0,
-        pedmodel = "a_m_m_indian_01", -- This is the model of the ped that will be created for the management menu @ the gas station.
-        cost = 100000, -- This is the cost of the gas station for someone purchasing it, not including tax.
-        shutoff = false, -- Leave as false, this is for when someone turns off the pumps. 
-        pedcoords = { -- Vector4, X, Y, Z & Heading.
+        pedmodel = "a_m_m_indian_01", -- Modelo do ped usado no menu de gerenciamento do posto.
+        cost = 100000, -- Custo do posto para compra, sem impostos.
+        shutoff = false, -- Deixe false; usado quando alguém desliga as bombas.
+        pedcoords = { -- Vector4, X, Y, Z e heading.
             x = -342.37,
             y = -1482.97,
             z = 29.71,
             h = 273.47,
         },
-        electriccharger = nil, -- Leave this as nil.
-        electricchargercoords = vector4(-341.63, -1459.39, 29.76, 271.73), -- This is the location of the electric charger.
-        label = "Alta Street Globe Oil", -- This is the default label, before someone changes the name.
+        electriccharger = nil, -- Deixe nil.
+        electricchargercoords = vector4(-341.63, -1459.39, 29.76, 271.73), -- Local do carregador elétrico.
+        label = "Alta Street Globe Oil", -- Nome padrão antes de alguém alterar.
     },
     ]]
 }
 
 -- Profanity Dictionary from another source, used for stopping people from putting the words blacklisted as the name of their gas stations. --
-
 Config.ProfanityList = {
     "4r5e",
     "5h1t",

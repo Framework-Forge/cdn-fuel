@@ -1,12 +1,58 @@
+local fuelDecorRegistered = false
+
+function EnsureFuelDecor()
+	if fuelDecorRegistered then return end
+	DecorRegister(Config.FuelDecor, 1)
+	fuelDecorRegistered = true
+end
+
+function Notify(msg, msgType, time)
+	if not msg then return end
+	pr_lib.Notify({
+		title = 'Combustível',
+		description = msg,
+		type = msgType or 'inform',
+		duration = time or 3500,
+		position = 'top',
+	})
+end
+
+RegisterNetEvent('cdn-fuel:client:openLegacyMenu', function(entries)
+	FuelBridge.OpenMenu(entries)
+end)
+
+RegisterNetEvent('cdn-fuel:client:closeMenu', function()
+	if pr_lib.hideContext then pr_lib.hideContext() end
+end)
+
+RegisterNetEvent('cdn-fuel:client:notify', function(message, messageType, duration)
+	Notify(message, messageType, duration)
+end)
+
+function Translate(key)
+	return FetchLocale(key)
+end
+
 function GetFuel(vehicle)
+	if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then return 0.0 end
+	if not DecorExistOn(vehicle, Config.FuelDecor) then
+		return GetVehicleFuelLevel(vehicle)
+	end
+
 	return DecorGetFloat(vehicle, Config.FuelDecor)
 end
 
 function SetFuel(vehicle, fuel)
+	if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then return end
 	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
+		EnsureFuelDecor()
 		SetVehicleFuelLevel(vehicle, fuel + 0.0)
 		DecorSetFloat(vehicle, Config.FuelDecor, GetVehicleFuelLevel(vehicle))
 	end
+end
+
+function PlayFuelSound()
+	PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 end
 
 function LoadAnimDict(dict)
