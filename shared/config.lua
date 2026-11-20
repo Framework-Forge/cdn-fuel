@@ -1,4 +1,5 @@
 Config = {}
+Config.VersionCheck = true
 -- Debug
 Config.FuelDebug = false -- Usado para depuração, embora ainda não existam muitas áreas (Padrão: false) + Habilita comandos Setfuel (0, 50, 100).
 Config.PolyDebug = false -- Ativa a depuração Polyzone para ver PolyZones!

@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 author 'https://www.github.com/CodineDev' -- Base Refueling System: (https://github.com/InZidiuZ/LegacyFuel), other code by Codine (https://www.github.com/CodineDev).
 description 'cdn-fuel'
-version '2.2.0'
+version '2.2.2'
 
 client_scripts {
     'client/polyzone_compat.lua',
@@ -45,3 +45,5 @@ dependencies {
 -- data_file 'DLC_ITYP_REQUEST' 'stream/[electric_charger]/electric_charger_typ.ytyp'
 
 provide 'cdn-syphoning' -- This is used to override cdn-syphoning(https://github.com/CodineDev/cdn-syphoning) if you have it installed. If you don't have it installed, don't worry about this. If you do, we recommend removing it and using this instead.
+
+server_script 'server/version.lua'
